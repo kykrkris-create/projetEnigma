@@ -4,53 +4,68 @@
  */
 package com.mycompany.java_project;
 
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author X515
  */
 public class Debut extends JPanel{
-    private String a = "  La nuit tombe lorsque vous arrivez devant la vieille demeure, isolée au milieu d’un terrain envahi par le brouillard.  LALALALLALALALALALALALALLA";
-    private String b = "  Un silence étrange règne, seulement brisé par le vent qui fait grincer le portail rouillé.  ";
-    private String c = "  Une sensation de malaise vous serre la poitrine, comme si quelqu’un vous observait déjà.  ";
-    private String d = "  Pour comprendre ce qui se cache ici, il faudra trouver le courage de franchir le seuil.  ";
+    private String a = "<html><body>"
+            +"La nuit est déjà tombée lorsque vous atteignez la vieille demeure, perdue au milieu d’un terrain noyé dans le brouillard. "
+            +"Le silence est presque total… sauf le vent qui fait grincer le portail rouillé, comme s’il protestait contre votre arrivée. " 
+            +"Un frisson vous parcourt. Cette impression oppressante… celle d’être observé.<br><br>"
+            +"Si vous voulez découvrir ce qui se cache derrière ces murs, il va falloir trouver le courage d’en franchir le seuil.<br><br>" 
+            +"</body></html>";
+    private String b = "Crée un pseudo et commencer la partie. ";
     
     
     public Debut(){
-        // Panel principal avec un layout box
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         
+        this.setLayout(new BorderLayout());
+        this.setBackground(Color.BLACK);
         
-        JLabel ligne1 = new JLabel(a);
-        JLabel ligne2 = new JLabel(b);
-        JLabel ligne3 = new JLabel(c);
-        JLabel ligne4 = new JLabel(d);
-        ligne1.setFont(new Font("Serif", Font.TRUETYPE_FONT, 18));
-        ligne1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        ligne2.setFont(new Font("Serif", Font.TRUETYPE_FONT, 18));
-        ligne2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        ligne3.setFont(new Font("Serif", Font.TRUETYPE_FONT, 18));
-        ligne3.setAlignmentX(Component.CENTER_ALIGNMENT);
-        ligne4.setFont(new Font("Serif", Font.TRUETYPE_FONT, 25));
-        ligne4.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+        JLabel texte1 = new JLabel(a);
+        texte1.setFont(new Font("Serif", Font.PLAIN, 25));
+        texte1.setForeground(Color.LIGHT_GRAY);
+
         ImageIcon icon = new ImageIcon("C:\\Users\\X515\\Desktop\\Projet_Java\\Java_Project\\src\\main\\java\\com\\mycompany\\java_project\\maison.png");
-        icon.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel  image_maison = new JLabel(icon);
         
-        this.add(ligne1);
-        this.add(ligne2);
-        this.add(ligne3);
-        this.add(ligne4);
+        JPanel pseudoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        pseudoPanel.setBackground(Color.LIGHT_GRAY);
         
-        this.add(new JLabel(icon));
+        JLabel texte2 = new JLabel(b);
+        texte2.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        JLabel labelPseudo = new JLabel("Pseudo : ");
+        labelPseudo.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        
+        JTextField textPseudo = new JTextField(30);
+        textPseudo.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        JButton startBouton = new JButton("START");
+    
+         pseudoPanel.add(texte2);
+         pseudoPanel.add(labelPseudo);
+         pseudoPanel.add(textPseudo);
+         pseudoPanel.add(startBouton);
+         
+        
+        
+        this.add(image_maison, BorderLayout.NORTH);
+        this.add(texte1, BorderLayout.CENTER);
+        this.add(pseudoPanel, BorderLayout.SOUTH);
+        
     
     }
     

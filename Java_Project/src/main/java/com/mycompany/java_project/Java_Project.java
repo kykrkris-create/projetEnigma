@@ -13,7 +13,6 @@ public class Java_Project {
 
     public static void main(String[] args) {
         var frame = new Frame();
-        frame.setSize(500, 500);
-        frame.setTitle("Démarrer une partie");
+        frame.setTitle("Escape Game");
     }
 }

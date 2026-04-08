@@ -18,8 +18,6 @@ public class Frame extends JFrame {
     
    private Debut debut;
     
-    
-    
     public Frame() throws HeadlessException {
         // Fermeture de la fenêtre => fermeture du programme
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -35,7 +33,7 @@ public class Frame extends JFrame {
      private void setup() {
         Box box = new Box(BoxLayout.PAGE_AXIS);     
         this.setContentPane(box); 
-        box.setBackground(Color.BLACK);
+        this.setBackground(Color.BLACK);
         box.setOpaque(true);
         this.debut = new Debut();
         this.add(debut);
