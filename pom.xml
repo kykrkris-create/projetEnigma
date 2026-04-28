@@ -7,7 +7,17 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>com.mycompany.java_project.Java_Project</exec.mainClass>
     </properties>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.png</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
