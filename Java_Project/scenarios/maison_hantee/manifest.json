@@ -1,0 +1,41 @@
+{
+    "schemaVersion": 1,
+    "id": "maison_hantee_test",
+    "title": "La Maison Hantée (test Rania)",
+    "author": "Rania",
+    "start": "p1",
+    "puzzles": {
+        "p1": {
+            "type": "qcm",
+            "prompt": "Deux clés sont posées sur la table. Une seule ouvre la porte. Laquelle choisis-tu ?",
+            "image": "images/Enigme1.png",
+            "choices": ["clé rouillée", "clé moisie"],
+            "routes": {
+                "clé rouillée": "p4",
+                "clé moisie": "end_lose"
+            }
+        },
+        "p4": {
+            "type": "text",
+            "prompt": "Mon premier est une préposition qui signifie 'à l'intérieur de'. Mon second est la planète sur laquelle tu vis. Mon troisième est le suffixe de ceux qui ne disent pas la vérité. Mon tout est la cérémonie à ton honneur.",
+            "image": "images/Enigme4.png",
+            "routes": {
+                "enterrement": "p5",
+                "Enterrement": "p5",
+                "ENTERREMENT": "p5",
+                "*": "end_lose"
+            }
+        },
+        "p5": {
+            "type": "qcm",
+            "prompt": "Choisis la porte qui scellera ton destin !",
+            "image": "images/Enigme5.png",
+            "choices": ["Porte carré", "Porte triangle", "Porte ronde"],
+            "routes": {
+                "Porte carré": "p4",
+                "Porte triangle": "end_win",
+                "Porte ronde": "end_lose"
+            }
+        }
+    }
+}

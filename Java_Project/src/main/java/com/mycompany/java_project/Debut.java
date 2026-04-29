@@ -37,7 +37,7 @@ public class Debut extends JPanel{
         texte1.setFont(new Font("Serif", Font.PLAIN, 25));
         texte1.setForeground(Color.LIGHT_GRAY);
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\X515\\Desktop\\Projet_Java\\Java_Project\\src\\main\\java\\com\\mycompany\\java_project\\maison.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\YOGA 6\\Downloads\\projetEnigma-master\\projetEnigma-master\\Java_Project\\src\\main\\java\\com\\mycompany\\java_project\\maison.png");
         JLabel  image_maison = new JLabel(icon);
         
         JPanel pseudoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

@@ -5,15 +5,13 @@
 package com.mycompany.java_project;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
-/**
- * Fenêtre principale du jeu.
- * @author Rania
- */
-public class Frame extends JFrame {
+public class Framebis
+        extends JFrame {
 
-    public Frame() {
+    public Framebis() {
         this.setTitle("Escape Game - La Maison Hantée");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 700);
@@ -26,7 +24,9 @@ public class Frame extends JFrame {
             Moteur moteur = new Moteur(scenario, this);
             moteur.demarrer();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage());
+            JOptionPane.showMessageDialog(this,
+                "Erreur de chargement : " + ex.getMessage(),
+                "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
 
@@ -34,6 +34,6 @@ public class Frame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Frame());
+        SwingUtilities.invokeLater(Frame::new);
     }
 }
