@@ -6,50 +6,77 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Enigme 2 : QCM sur le meurtrier de Scream 1.
- * Bonne réponse : Billy Loomis → Enigme 3.
- * 2 tentatives max. Echec → EcranFin (perdu).
+ * Enigme 2 : QCM — identifier le meurtrier dans le film Scream (1996).
+ *
+ * <p>Règles :
+ * <ul>
+ *   <li>3 choix possibles : Roman Bridger, Billy Loomis (correct), Mickey Altieri.</li>
+ *   <li>2 tentatives maximum.</li>
+ *   <li>Bonne réponse → le Moteur avance via onReponse("Billy Loomis") → énigme 3.</li>
+ *   <li>Plus de tentatives → le Moteur avance via onReponse de la mauvaise réponse → end_lose.</li>
+ * </ul>
+ *
+ * <p>Cette classe s'intègre dans l'architecture Moteur/Puzzle/Scenario :
+ * elle ne navigue pas elle-même mais délègue au {@link Moteur} via {@code moteur.onReponse()}.
  *
  * @author Lou-Ann
  */
 public class Enigme2 extends JPanel implements ActionListener {
 
-    private Frame frame;
+    /** Moteur de jeu qui gère la navigation entre les énigmes. */
+    private final Moteur moteur;
 
     private JButton boutonRoman;
     private JButton boutonBilly;
     private JButton boutonMickey;
     private JLabel labelTentatives;
+
+    /** Nombre de tentatives restantes, initialisé à 2. */
     private int tentativesRestantes = 2;
+
+    /** Texte exact de la bonne réponse, doit correspondre à une clé dans le manifest. */
+    static final String BONNE_REPONSE = "Billy Loomis";
 
     private Image imageFond;
 
-    public Enigme2(Frame frame) {
-        this.frame = frame;
+    /**
+     * Construit le panneau de l'énigme 2.
+     *
+     * @param moteur le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
+     */
+    public Enigme2(Moteur moteur) {
+        this.moteur = moteur;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
 
-        imageFond = new ImageIcon(getClass().getResource("enigme2.png")).getImage();
+        // Chargement de l'image de fond depuis les ressources du classpath
+        var urlImage = getClass().getResource("enigme2.png");
+        if (urlImage != null) {
+            imageFond = new ImageIcon(urlImage).getImage();
+        }
 
         var police = new Font("Serif", Font.BOLD, 16);
 
+        // --- Boutons de choix ---
         boutonRoman  = new JButton("Roman Bridger");
-        boutonBilly  = new JButton("Billy Loomis");
+        boutonBilly  = new JButton(BONNE_REPONSE);
         boutonMickey = new JButton("Mickey Altieri");
 
-        styliserBouton(boutonRoman, police);
-        styliserBouton(boutonBilly, police);
+        styliserBouton(boutonRoman,  police);
+        styliserBouton(boutonBilly,  police);
         styliserBouton(boutonMickey, police);
 
         boutonRoman.addActionListener(this);
         boutonBilly.addActionListener(this);
         boutonMickey.addActionListener(this);
 
-        labelTentatives = new JLabel("Tentatives restantes : 2", JLabel.CENTER);
+        // --- Label tentatives ---
+        labelTentatives = new JLabel("Tentatives restantes : " + tentativesRestantes, JLabel.CENTER);
         labelTentatives.setForeground(Color.WHITE);
         labelTentatives.setFont(police);
 
+        // --- Panel image avec positionnement absolu ---
         var panelImage = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -79,6 +106,7 @@ public class Enigme2 extends JPanel implements ActionListener {
         panelImage.add(labelTentatives);
         this.add(panelImage, BorderLayout.CENTER);
 
+        // --- Consigne en bas ---
         var labelConsigne = new JLabel(
             "<html><div style='text-align:center;'>"
             + "Une alarme retentit dans la maison...<br>"
@@ -94,6 +122,13 @@ public class Enigme2 extends JPanel implements ActionListener {
         this.add(labelConsigne, BorderLayout.SOUTH);
     }
 
+    /**
+     * Applique le style gothique commun (fond noir, texte blanc, bordure claire)
+     * à un bouton.
+     *
+     * @param b      le bouton à styliser.
+     * @param police la police à appliquer.
+     */
     private void styliserBouton(JButton b, Font police) {
         b.setFont(police);
         b.setBackground(Color.BLACK);
@@ -103,25 +138,40 @@ public class Enigme2 extends JPanel implements ActionListener {
         b.setOpaque(true);
     }
 
+    /**
+     * Gère le clic sur l'un des trois boutons de réponse.
+     *
+     * <p>Si Billy Loomis est sélectionné, délègue au Moteur avec la bonne réponse.
+     * Sinon, décrémente le compteur de tentatives. Quand les tentatives tombent
+     * à 0, délègue au Moteur avec le texte du bouton cliqué → end_lose.
+     *
+     * @param e l'événement d'action déclenché par le bouton cliqué.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == boutonBilly) {
-            JOptionPane.showMessageDialog(this, "Bonne réponse !", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            frame.allerA(new Enigme3(frame));
+        JButton boutonClique = (JButton) e.getSource();
+        String reponse = boutonClique.getText();
+
+        if (boutonClique == boutonBilly) {
+            JOptionPane.showMessageDialog(this, "Bonne réponse !", "Succès",
+                    JOptionPane.INFORMATION_MESSAGE);
+            moteur.onReponse(reponse);
         } else {
             tentativesRestantes--;
+            labelTentatives.setText("Tentatives restantes : " + tentativesRestantes);
             if (tentativesRestantes > 0) {
-                labelTentatives.setText("Tentatives restantes : " + tentativesRestantes);
-                JOptionPane.showMessageDialog(this, "Mauvaise réponse... Réessayez !", "Erreur", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Mauvaise réponse... Réessayez !",
+                        "Erreur", JOptionPane.WARNING_MESSAGE);
             } else {
-                labelTentatives.setText("Plus de tentatives.");
+                // Plus de tentatives : désactivation de l'interface
                 boutonRoman.setEnabled(false);
                 boutonBilly.setEnabled(false);
                 boutonMickey.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "La réponse était : Billy Loomis", "Échec", JOptionPane.ERROR_MESSAGE);
-                frame.allerA(new EcranFin(frame, false));
+                JOptionPane.showMessageDialog(this,
+                        "La réponse était : " + BONNE_REPONSE,
+                        "Échec", JOptionPane.ERROR_MESSAGE);
+                moteur.onReponse(reponse); // route de la mauvaise réponse → end_lose
             }
         }
     }
 }
-
