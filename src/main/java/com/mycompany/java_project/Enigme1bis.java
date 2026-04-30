@@ -99,10 +99,6 @@ public class Enigme1bis extends JPanel implements ActionListener {
         this.add(labelConsigne, BorderLayout.SOUTH);
     }
 
-    Enigme1bis() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String reponse = champReponse.getText().trim();
