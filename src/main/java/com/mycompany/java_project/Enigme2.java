@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Enigme 2 : QCM — identifier le meurtrier dans le film Scream (1996).
@@ -13,10 +14,10 @@ import java.awt.event.ActionListener;
  *   <li>3 choix possibles : Roman Bridger, Billy Loomis (correct), Mickey Altieri.</li>
  *   <li>2 tentatives maximum.</li>
  *   <li>Bonne réponse → le Moteur avance via onReponse("Billy Loomis") → énigme 3.</li>
- *   <li>Plus de tentatives → le Moteur avance via onReponse de la mauvaise réponse → end_lose.</li>
+ *   <li>Plus de tentatives → le Moteur avance via onReponse du mauvais choix → end_lose.</li>
  * </ul>
  *
- * <p>Cette classe s'intègre dans l'architecture Moteur/Puzzle/Scenario :
+ * <p>S'intègre dans l'architecture Moteur/Puzzle/Scenario :
  * elle ne navigue pas elle-même mais délègue au {@link Moteur} via {@code moteur.onReponse()}.
  *
  * @author Lou-Ann
@@ -26,13 +27,14 @@ public class Enigme2 extends JPanel implements ActionListener {
     /** Moteur de jeu qui gère la navigation entre les énigmes. */
     private final Moteur moteur;
 
-    private JButton boutonRoman;
-    private JButton boutonBilly;
-    private JButton boutonMickey;
+    /** Puzzle courant chargé depuis le manifest. */
+    private final Puzzle puzzle;
+
+    private JButton[] boutons;
     private JLabel labelTentatives;
 
     /** Nombre de tentatives restantes, initialisé à 2. */
-    private int tentativesRestantes = 2;
+    private int tentativesRestantes;
 
     /** Texte exact de la bonne réponse, doit correspondre à une clé dans le manifest. */
     static final String BONNE_REPONSE = "Billy Loomis";
@@ -41,35 +43,37 @@ public class Enigme2 extends JPanel implements ActionListener {
 
     /**
      * Construit le panneau de l'énigme 2.
+     * Ce constructeur suit la même signature que PanelQcm pour
+     * pouvoir être instancié par le Moteur.
      *
-     * @param moteur le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
+     * @param puzzle          le puzzle chargé depuis le manifest ; ne doit pas être null.
+     * @param dossierScenario chemin vers le dossier du scénario (pour charger l'image).
+     * @param moteur          le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
      */
-    public Enigme2(Moteur moteur) {
+    public Enigme2(Puzzle puzzle, String dossierScenario, Moteur moteur) {
         this.moteur = moteur;
+        this.puzzle = puzzle;
+        this.tentativesRestantes = 2;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
 
-        // Chargement de l'image de fond depuis les ressources du classpath
-        var urlImage = getClass().getResource("enigme2.png");
-        if (urlImage != null) {
-            imageFond = new ImageIcon(urlImage).getImage();
+        // Chargement de l'image depuis le dossier scénario (comme PanelQcm)
+        File imgFile = new File(dossierScenario, puzzle.getImage());
+        if (imgFile.exists()) {
+            imageFond = new ImageIcon(imgFile.getAbsolutePath()).getImage();
         }
 
         var police = new Font("Serif", Font.BOLD, 16);
 
-        // --- Boutons de choix ---
-        boutonRoman  = new JButton("Roman Bridger");
-        boutonBilly  = new JButton(BONNE_REPONSE);
-        boutonMickey = new JButton("Mickey Altieri");
-
-        styliserBouton(boutonRoman,  police);
-        styliserBouton(boutonBilly,  police);
-        styliserBouton(boutonMickey, police);
-
-        boutonRoman.addActionListener(this);
-        boutonBilly.addActionListener(this);
-        boutonMickey.addActionListener(this);
+        // --- Boutons générés depuis les choix du manifest ---
+        boutons = new JButton[puzzle.getChoices().size()];
+        for (int i = 0; i < puzzle.getChoices().size(); i++) {
+            JButton b = new JButton(puzzle.getChoices().get(i));
+            styliserBouton(b, police);
+            b.addActionListener(this);
+            boutons[i] = b;
+        }
 
         // --- Label tentatives ---
         labelTentatives = new JLabel("Tentatives restantes : " + tentativesRestantes, JLabel.CENTER);
@@ -89,29 +93,26 @@ public class Enigme2 extends JPanel implements ActionListener {
             @Override
             public void doLayout() {
                 int w = getWidth(), h = getHeight();
-                int btnW = 180, btnH = 40, esp = 20;
-                int xDebut = (w - 3 * btnW - 2 * esp) / 2;
+                int btnW = 180, btnH = 40;
+                int n = boutons.length;
+                int esp = 20;
+                int xDebut = (w - n * btnW - (n - 1) * esp) / 2;
                 int y = h - btnH - 20;
-                boutonRoman.setBounds(xDebut, y, btnW, btnH);
-                boutonBilly.setBounds(xDebut + btnW + esp, y, btnW, btnH);
-                boutonMickey.setBounds(xDebut + 2 * (btnW + esp), y, btnW, btnH);
+                for (int i = 0; i < n; i++) {
+                    boutons[i].setBounds(xDebut + i * (btnW + esp), y, btnW, btnH);
+                }
                 labelTentatives.setBounds(0, y - 30, w, 25);
             }
         };
         panelImage.setBackground(Color.BLACK);
         panelImage.setPreferredSize(new Dimension(800, 480));
-        panelImage.add(boutonRoman);
-        panelImage.add(boutonBilly);
-        panelImage.add(boutonMickey);
+        for (JButton b : boutons) panelImage.add(b);
         panelImage.add(labelTentatives);
         this.add(panelImage, BorderLayout.CENTER);
 
-        // --- Consigne en bas ---
+        // --- Consigne lue depuis le manifest ---
         var labelConsigne = new JLabel(
-            "<html><div style='text-align:center;'>"
-            + "Une alarme retentit dans la maison...<br>"
-            + "Comment s'appelle le meurtrier dans Scream 1 ?"
-            + "</div></html>"
+            "<html><div style='text-align:center;'>" + puzzle.getPrompt() + "</div></html>"
         );
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -139,11 +140,11 @@ public class Enigme2 extends JPanel implements ActionListener {
     }
 
     /**
-     * Gère le clic sur l'un des trois boutons de réponse.
+     * Gère le clic sur l'un des boutons de réponse.
      *
      * <p>Si Billy Loomis est sélectionné, délègue au Moteur avec la bonne réponse.
-     * Sinon, décrémente le compteur de tentatives. Quand les tentatives tombent
-     * à 0, délègue au Moteur avec le texte du bouton cliqué → end_lose.
+     * Sinon, décrémente le compteur. Quand les tentatives tombent à 0,
+     * délègue au Moteur avec le texte du bouton cliqué → end_lose via le manifest.
      *
      * @param e l'événement d'action déclenché par le bouton cliqué.
      */
@@ -152,7 +153,7 @@ public class Enigme2 extends JPanel implements ActionListener {
         JButton boutonClique = (JButton) e.getSource();
         String reponse = boutonClique.getText();
 
-        if (boutonClique == boutonBilly) {
+        if (BONNE_REPONSE.equals(reponse)) {
             JOptionPane.showMessageDialog(this, "Bonne réponse !", "Succès",
                     JOptionPane.INFORMATION_MESSAGE);
             moteur.onReponse(reponse);
@@ -163,10 +164,8 @@ public class Enigme2 extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Mauvaise réponse... Réessayez !",
                         "Erreur", JOptionPane.WARNING_MESSAGE);
             } else {
-                // Plus de tentatives : désactivation de l'interface
-                boutonRoman.setEnabled(false);
-                boutonBilly.setEnabled(false);
-                boutonMickey.setEnabled(false);
+                // Plus de tentatives : désactivation de tous les boutons
+                for (JButton b : boutons) b.setEnabled(false);
                 JOptionPane.showMessageDialog(this,
                         "La réponse était : " + BONNE_REPONSE,
                         "Échec", JOptionPane.ERROR_MESSAGE);
