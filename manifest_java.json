@@ -1,0 +1,80 @@
+{
+    "schemaVersion": 1,
+    "id": "La Maison Hantée",
+    "title": "La Maison Hantée",
+    "author": "Desir",
+    "start": "p1",
+    "puzzles": {
+        "p1": {
+            "type": "boolean",
+            "prompt": "Deux clés sont posées sur la table. Une seule ouvre la porte du bureau. Laquelle choisis-tu ?",
+            "image": "images/porte.png",
+            "choices": [
+                "clé rouillée",
+                "clé moisie"
+            ],
+            "routes": {
+                "clé moisie": "p2",
+                "clé rouillée": "p1bis"
+            }
+        },
+        "p1bis": {
+            "type": "text",
+            "prompt": "Quel est la valeur de pi avec 4 chiffres derrière la virgule ?",
+            "attempts": 3,
+            "image": "images/tableau.png",
+            "routes": {
+                "3,1415": "p2",
+                "*": "end_lose"
+            }
+        },
+        "p2": {
+            "type": "qcm",
+            "prompt": "Comment s'appelle le meurtrier de Scream 1 ?",
+            "attempts": 2,
+            "image": "images/alarme.png",
+            "choices": [
+                "Roman Bridger",
+                "Billy Loomis",
+                "Mickey Altieri"
+            ],
+            "routes": {
+                "Roman Bridger": "end_lose",
+                "Billy Loomis": "p3",
+                "Mickey Altieri": "end_lose"
+            }
+        },
+        "p3": {
+            "type": "text",
+            "prompt": "Retrouvez le mot de 7 lettres avec les lettres qui sont allumés par les LEDS correspondantes; sachant que t'as 2 lettres qui peuvent être réutiliser. ",
+            "attempts": 3,
+            "image": "images/coffre.png",
+            "routes": {
+                "meurtre": "p4",
+                "Meurtre": "p4",
+                "*": "end_lose"
+            }
+        },
+        "p4": {
+            "type": "text",
+            "prompt": "Mon prremier est une préposition qui signifie -à l'intérieur de-. Mon second est la planête sur laquelle tu vis...pour l'instant. Mon troisième est le suffixe de ceux qui ne disent pas la vérité. Mon tout est la cérémonie à ton honneur.",
+            "attempts": 3,
+            "image": "images/coffre.png",
+            "routes": {
+                "enterrement": "p4",
+                "Enterrement": "p4",
+                "*": "end_lose"
+            }
+        },
+        "p5": {
+            "type": "qcm",
+            "prompt": "Choisit la porte qui scellera ton destin !!",
+            "image": "images/coffre.png",
+            "choices": [
+                "Porte carré",
+                "Porte triangle",
+                "porte ronde"
+            ]
+        }
+    }
+}
