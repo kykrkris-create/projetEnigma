@@ -94,10 +94,6 @@ public class Enigme2 extends JPanel implements ActionListener {
         this.add(labelConsigne, BorderLayout.SOUTH);
     }
 
-    Enigme2() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     private void styliserBouton(JButton b, Font police) {
         b.setFont(police);
         b.setBackground(Color.BLACK);
@@ -128,3 +124,4 @@ public class Enigme2 extends JPanel implements ActionListener {
         }
     }
 }
+
