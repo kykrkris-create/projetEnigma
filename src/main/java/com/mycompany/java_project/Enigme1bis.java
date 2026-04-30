@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Enigme 1bis : trouver la valeur de pi avec 4 chiffres après la virgule.
@@ -16,7 +17,7 @@ import java.awt.event.ActionListener;
  *   <li>Plus de tentatives → le Moteur avance via onReponse("*") → end_lose.</li>
  * </ul>
  *
- * <p>Cette classe s'intègre dans l'architecture Moteur/Puzzle/Scenario :
+ * <p>S'intègre dans l'architecture Moteur/Puzzle/Scenario :
  * elle ne navigue pas elle-même mais délègue au {@link Moteur} via {@code moteur.onReponse()}.
  *
  * @author Lou-Ann
@@ -25,6 +26,9 @@ public class Enigme1bis extends JPanel implements ActionListener {
 
     /** Moteur de jeu qui gère la navigation entre les énigmes. */
     private final Moteur moteur;
+
+    /** Puzzle courant chargé depuis le manifest. */
+    private final Puzzle puzzle;
 
     private JTextField champReponse;
     private JButton boutonValider;
@@ -43,19 +47,26 @@ public class Enigme1bis extends JPanel implements ActionListener {
 
     /**
      * Construit le panneau de l'énigme 1bis.
+     * Ce constructeur suit la même signature que PanelTexte pour
+     * pouvoir être instancié par le Moteur.
      *
-     * @param moteur le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
+     * @param puzzle          le puzzle chargé depuis le manifest ; ne doit pas être null.
+     * @param dossierScenario chemin vers le dossier du scénario (pour charger l'image).
+     * @param moteur          le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
+     * @param tentativesMax   nombre de tentatives autorisées (passé par le Moteur, normalement 3).
      */
-    public Enigme1bis(Moteur moteur) {
+    public Enigme1bis(Puzzle puzzle, String dossierScenario, Moteur moteur, int tentativesMax) {
         this.moteur = moteur;
+        this.puzzle = puzzle;
+        this.tentativesRestantes = tentativesMax;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
 
-        // Chargement de l'image de fond depuis les ressources du classpath
-        var urlImage = getClass().getResource("enigme1bis.png");
-        if (urlImage != null) {
-            imageFond = new ImageIcon(urlImage).getImage();
+        // Chargement de l'image depuis le dossier scénario (comme PanelTexte)
+        File imgFile = new File(dossierScenario, puzzle.getImage());
+        if (imgFile.exists()) {
+            imageFond = new ImageIcon(imgFile.getAbsolutePath()).getImage();
         }
 
         var police = new Font("Serif", Font.BOLD, 16);
@@ -112,12 +123,9 @@ public class Enigme1bis extends JPanel implements ActionListener {
         panelImage.add(labelTentatives);
         this.add(panelImage, BorderLayout.CENTER);
 
-        // --- Consigne en bas ---
+        // --- Consigne lue depuis le manifest ---
         var labelConsigne = new JLabel(
-            "<html><div style='text-align:center;'>"
-            + "Vous êtes bloqué devant une pierre tombale...<br>"
-            + "Quelle est la valeur de pi avec 4 chiffres après la virgule ?"
-            + "</div></html>"
+            "<html><div style='text-align:center;'>" + puzzle.getPrompt() + "</div></html>"
         );
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 20));
