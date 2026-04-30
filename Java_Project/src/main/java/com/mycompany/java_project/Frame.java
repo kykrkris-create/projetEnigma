@@ -5,35 +5,18 @@
 package com.mycompany.java_project;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
- * Fenêtre principale du jeu.
+ * TestDebutFenetre
  * @author Rania
  */
-public class Frame extends JFrame {
-
-    public Frame() {
-        this.setTitle("Escape Game - La Maison Hantée");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1000, 700);
-        this.setLocationRelativeTo(null);
-
-        try {
-            File dossierScenario = new File("scenarios/maison_hantee");
-            ScenarioLoader loader = new ScenarioLoader();
-            Scenario scenario = loader.charger(dossierScenario);
-            Moteur moteur = new Moteur(scenario, this);
-            moteur.demarrer();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage());
-            ex.printStackTrace();
-        }
-
-        this.setVisible(true);
-    }
-
+public class Frame {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Frame());
+        JFrame frame = new JFrame("Test Debut");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setContentPane(new Debut());
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }

@@ -2,20 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.java_project;
-
+package com.mycompany.java_project; 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-/**
- * Panel pour énigmes QCM et boolean.
+/** 
  * @author Rania
  */
-public class PanelQcm extends JPanel implements ActionListener {
-
+public class PanelQcm extends JPanel implements ActionListener { 
     private Puzzle puzzle;
     private Moteur moteur;
     private JButton[] boutons;
@@ -23,16 +20,13 @@ public class PanelQcm extends JPanel implements ActionListener {
 
     public PanelQcm(Puzzle puzzle, String dossierScenario, Moteur moteur) {
         this.puzzle = puzzle;
-        this.moteur = moteur;
-
+        this.moteur = moteur; 
         this.setLayout(new BorderLayout());
-        this.setBackground(Color.BLACK);
-
+        this.setBackground(Color.BLACK); 
         File imgFile = new File(dossierScenario, puzzle.getImage());
         if (imgFile.exists()) {
             imageFond = new ImageIcon(imgFile.getAbsolutePath()).getImage();
-        }
-
+        } 
         Font police = new Font("Serif", Font.BOLD, 16);
         boutons = new JButton[puzzle.getChoices().size()];
         for (int i = 0; i < puzzle.getChoices().size(); i++) {
@@ -41,8 +35,7 @@ public class PanelQcm extends JPanel implements ActionListener {
             b.setFont(police);
             b.addActionListener(this);
             boutons[i] = b;
-        }
-
+        } 
         JPanel panelImage = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -50,8 +43,7 @@ public class PanelQcm extends JPanel implements ActionListener {
                 if (imageFond != null) {
                     g.drawImage(imageFond, 0, 0, getWidth(), getHeight(), this);
                 }
-            }
-
+            } 
             @Override
             public void doLayout() {
                 int w = getWidth();
@@ -69,8 +61,7 @@ public class PanelQcm extends JPanel implements ActionListener {
         panelImage.setBackground(Color.BLACK);
         panelImage.setPreferredSize(new Dimension(800, 480));
         for (JButton b : boutons) panelImage.add(b);
-        this.add(panelImage, BorderLayout.CENTER);
-
+        this.add(panelImage, BorderLayout.CENTER); 
         JLabel labelConsigne = new JLabel(puzzle.getPrompt(), JLabel.CENTER);
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 18));
@@ -78,16 +69,14 @@ public class PanelQcm extends JPanel implements ActionListener {
         labelConsigne.setOpaque(true);
         labelConsigne.setBackground(Color.BLACK);
         this.add(labelConsigne, BorderLayout.SOUTH);
-    }
-
+    } 
     private void styliserBouton(JButton b) {
         b.setBackground(Color.BLACK);
         b.setForeground(Color.WHITE);
         b.setFocusPainted(false);
         b.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
         b.setOpaque(true);
-    }
-
+    } 
     @Override
     public void actionPerformed(ActionEvent e) {
         for (JButton b : boutons) {

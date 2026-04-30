@@ -4,11 +4,10 @@
  */
 package com.mycompany.java_project;
 
-/**
- * Interface pour recevoir la réponse de l'utilisateur depuis un panel d'énigme.
- *
+/** 
  * @author Rania
  */
+//Interface pour recvoir la reponse de l'utilisateur
 public interface EcouteurReponse {
     void onReponse(String reponse);
 }
