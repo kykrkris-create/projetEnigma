@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * Enigme 1bis : trouver la valeur de pi avec 4 chiffres après la virgule.
@@ -13,22 +12,19 @@ import java.io.File;
  * <p>Règles :
  * <ul>
  *   <li>3 tentatives maximum.</li>
- *   <li>Bonne réponse (3,1415 ou 3.1415) → le Moteur avance via onReponse("3,1415").</li>
- *   <li>Plus de tentatives → le Moteur avance via onReponse("*") → end_lose.</li>
+ *   <li>Bonne réponse (3,1415 ou 3.1415) → appel de ecouteur.onReponse("3,1415").</li>
+ *   <li>Plus de tentatives → appel de ecouteur.onReponse("*") → end_lose.</li>
  * </ul>
  *
- * <p>S'intègre dans l'architecture Moteur/Puzzle/Scenario :
- * elle ne navigue pas elle-même mais délègue au {@link Moteur} via {@code moteur.onReponse()}.
+ * <p>Cette classe utilise l'interface {@link EcouteurReponse} pour déléguer
+ * la navigation au {@link Moteur}, sans en dépendre directement.
  *
  * @author Lou-Ann
  */
 public class Enigme1bis extends JPanel implements ActionListener {
 
-    /** Moteur de jeu qui gère la navigation entre les énigmes. */
-    private final Moteur moteur;
-
-    /** Puzzle courant chargé depuis le manifest. */
-    private final Puzzle puzzle;
+    /** Écouteur de réponse (implémenté par le Moteur) pour la navigation. */
+    private final EcouteurReponse ecouteur;
 
     private JTextField champReponse;
     private JButton boutonValider;
@@ -47,26 +43,19 @@ public class Enigme1bis extends JPanel implements ActionListener {
 
     /**
      * Construit le panneau de l'énigme 1bis.
-     * Ce constructeur suit la même signature que PanelTexte pour
-     * pouvoir être instancié par le Moteur.
      *
-     * @param puzzle          le puzzle chargé depuis le manifest ; ne doit pas être null.
-     * @param dossierScenario chemin vers le dossier du scénario (pour charger l'image).
-     * @param moteur          le moteur de jeu, utilisé pour la navigation ; ne doit pas être null.
-     * @param tentativesMax   nombre de tentatives autorisées (passé par le Moteur, normalement 3).
+     * @param ecouteur l'écouteur de réponse (le Moteur) ; ne doit pas être null.
      */
-    public Enigme1bis(Puzzle puzzle, String dossierScenario, Moteur moteur, int tentativesMax) {
-        this.moteur = moteur;
-        this.puzzle = puzzle;
-        this.tentativesRestantes = tentativesMax;
+    public Enigme1bis(EcouteurReponse ecouteur) {
+        this.ecouteur = ecouteur;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
 
-        // Chargement de l'image depuis le dossier scénario (comme PanelTexte)
-        File imgFile = new File(dossierScenario, puzzle.getImage());
-        if (imgFile.exists()) {
-            imageFond = new ImageIcon(imgFile.getAbsolutePath()).getImage();
+        // Chargement de l'image de fond depuis les ressources du classpath
+        var urlImage = getClass().getResource("enigme1bis.png");
+        if (urlImage != null) {
+            imageFond = new ImageIcon(urlImage).getImage();
         }
 
         var police = new Font("Serif", Font.BOLD, 16);
@@ -123,9 +112,12 @@ public class Enigme1bis extends JPanel implements ActionListener {
         panelImage.add(labelTentatives);
         this.add(panelImage, BorderLayout.CENTER);
 
-        // --- Consigne lue depuis le manifest ---
+        // --- Consigne en bas ---
         var labelConsigne = new JLabel(
-            "<html><div style='text-align:center;'>" + puzzle.getPrompt() + "</div></html>"
+            "<html><div style='text-align:center;'>"
+            + "Vous êtes bloqué devant une pierre tombale...<br>"
+            + "Quelle est la valeur de pi avec 4 chiffres après la virgule ?"
+            + "</div></html>"
         );
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -139,7 +131,7 @@ public class Enigme1bis extends JPanel implements ActionListener {
     /**
      * Gère le clic sur "Valider" ou la touche Entrée dans le champ de saisie.
      *
-     * <p>Si la réponse est correcte, délègue la navigation au Moteur avec la
+     * <p>Si la réponse est correcte, délègue la navigation à l'écouteur avec la
      * clé "3,1415". Si toutes les tentatives sont épuisées, délègue avec "*"
      * pour atteindre la route par défaut (end_lose dans le manifest).
      *
@@ -152,7 +144,7 @@ public class Enigme1bis extends JPanel implements ActionListener {
         if (estBonneReponse(reponse)) {
             JOptionPane.showMessageDialog(this, "Bonne réponse !", "Succès",
                     JOptionPane.INFORMATION_MESSAGE);
-            moteur.onReponse(BONNE_REPONSE_VIRGULE); // clé utilisée dans le manifest
+            ecouteur.onReponse(BONNE_REPONSE_VIRGULE); // clé utilisée dans le manifest
         } else {
             tentativesRestantes--;
             labelTentatives.setText("Tentatives restantes : " + tentativesRestantes);
@@ -161,13 +153,12 @@ public class Enigme1bis extends JPanel implements ActionListener {
                         "Erreur", JOptionPane.WARNING_MESSAGE);
                 champReponse.setText("");
             } else {
-                // Plus de tentatives : désactivation de l'interface
                 champReponse.setEnabled(false);
                 boutonValider.setEnabled(false);
                 JOptionPane.showMessageDialog(this,
                         "La réponse était : " + BONNE_REPONSE_VIRGULE,
                         "Échec", JOptionPane.ERROR_MESSAGE);
-                moteur.onReponse("*"); // route par défaut → end_lose
+                ecouteur.onReponse("*"); // route par défaut → end_lose
             }
         }
     }
