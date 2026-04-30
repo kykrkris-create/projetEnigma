@@ -4,40 +4,19 @@
  */
 package com.mycompany.java_project;
 
-import java.awt.Color;
-import java.awt.HeadlessException;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
+import javax.swing.*;
 
-/** 
-*
- * @author X515
+/**
+ * TestDebutFenetre
+ * @author Rania
  */
-public class Frame extends JFrame {
-    
-   private Debut debut;
-    
-    public Frame() throws HeadlessException {
-        // Fermeture de la fenêtre => fermeture du programme
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        // Construction du contenu
-        setup();
-        this.pack();
-        // Centrage de la fenêtre sur l'écran
-        this.setLocationRelativeTo(null);
-                   
-        this.setVisible(true);
+public class Frame {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Test Debut");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setContentPane(new Debut());
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
-    
-     private void setup() {
-        Box box = new Box(BoxLayout.PAGE_AXIS);     
-        this.setContentPane(box); 
-        this.setBackground(Color.BLACK);
-        box.setOpaque(true);
-        this.debut = new Debut();
-        this.add(debut);
-     }
-     
-    }
-
+}
