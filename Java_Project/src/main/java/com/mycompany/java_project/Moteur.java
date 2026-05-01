@@ -1,17 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.java_project;
 
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Classe qui gere le scénario et la navigation.
+/** 
  * @author Rania
  */
-public class Moteur { 
+public class Moteur {
+
     private Scenario scenario;
     private JFrame fenetre;
     private Puzzle puzzleCourant;
@@ -20,22 +16,27 @@ public class Moteur {
     public Moteur(Scenario scenario, JFrame fenetre) {
         this.scenario = scenario;
         this.fenetre = fenetre;
-    } 
+    }
+
     public void demarrer() {
         afficherPuzzle(scenario.getStartPuzzleId());
-    } 
+    }
+
     public void afficherPuzzle(String puzzleId) {
         if (puzzleId.startsWith("end_")) {
             afficherFin(puzzleId);
             return;
-        } 
+        }
+
         Puzzle p = scenario.getPuzzle(puzzleId);
         if (p == null) {
             JOptionPane.showMessageDialog(fenetre, "Énigme introuvable : " + puzzleId);
             return;
         }
+
         this.puzzleCourant = p;
-        JPanel panel; 
+        JPanel panel;
+
         if (p.getType().equals("qcm") || p.getType().equals("boolean")) {
             panel = new PanelQcm(p, scenario.getDossierScenario(), this);
         } else if (p.getType().equals("text")) {
@@ -43,11 +44,13 @@ public class Moteur {
         } else {
             JOptionPane.showMessageDialog(fenetre, "Type non supporté : " + p.getType());
             return;
-        } 
+        }
+
         fenetre.setContentPane(panel);
         fenetre.revalidate();
         fenetre.repaint();
-    } 
+    }
+
     public void onReponse(String reponse) {
         nbEnigmesResolues++;
         String prochain = puzzleCourant.getNextPuzzleId(reponse);
@@ -56,22 +59,44 @@ public class Moteur {
             return;
         }
         afficherPuzzle(prochain);
-    } 
+    }
+
     private void afficherFin(String endId) {
         boolean victoire = endId.equals("end_win");
-        JPanel panelFin = new JPanel(new BorderLayout());
-        panelFin.setBackground(Color.BLACK); 
-        JLabel labelTitre = new JLabel(victoire ? "VICTOIRE" : "FIN", JLabel.CENTER);
-        labelTitre.setFont(new Font("Serif", Font.BOLD, 48));
-        labelTitre.setForeground(victoire ? new Color(200, 170, 100) : new Color(180, 30, 30)); 
-        String texte = victoire ? "Tu as résolu toutes les mystères !" : "Tu n'as pas survécu :)";
-        JLabel labelMessage = new JLabel(texte + " Énigmes résolues : " + nbEnigmesResolues, JLabel.CENTER);
-        labelMessage.setForeground(Color.WHITE);
-        labelMessage.setFont(new Font("Serif",Font.PLAIN, 22)); 
-        panelFin.add(labelTitre, BorderLayout.NORTH);
-        panelFin.add(labelMessage, BorderLayout.CENTER); 
-        fenetre.setContentPane(panelFin);
+
+        if (victoire) {
+            // Victoire : on garde la musique d'ambiance qui continue de tourner
+        } else {
+            // Défaite : on coupe la musique et on joue le son creepy
+            SonPlayer.arreterMusique();
+            String cheminSon = scenario.getDossierScenario() + "/sounds/gameover.wav";
+            SonPlayer.jouer(cheminSon);
+        }
+
+        String messagePersonnalise = getMessageFin(endId);
+        Fin ecran = new Fin(victoire, nbEnigmesResolues, messagePersonnalise);
+        fenetre.setContentPane(ecran);
         fenetre.revalidate();
         fenetre.repaint();
+    }
+
+    /** Retourne un message personnalisé selon le type de fin. */
+    private String getMessageFin(String endId) {
+        switch (endId) {
+            case "end_win":
+                return "La maison se souvient de toi. Elle t'attendra :) ";
+            case "end_lose_pi":
+                return "3,1416... Tu aurais dû le savoir quand meme :) ";
+            case "end_lose_scream":
+                return "Le meurtrier sort de l'ombre... Trop tard pour fuir :) ";
+            case "end_lose_meurtre":
+                return "M.E.U.R.T.R.E. Tu l'épelleras dans ta tombe :) ";
+            case "end_lose_charade":
+                return "Tu n'as pas compris la charade. C'est pas grave, tu vas la vivre de toute façon :) ";
+            case "end_lose_hublot":
+                return "La porte ronde aime les visiteurs. Elle ne les laisse plus jamais sortir...";
+            default:
+                return "Tu n'as pas perdu. On a juste décidé que c'était fini pour toi...";
+        }
     }
 }
