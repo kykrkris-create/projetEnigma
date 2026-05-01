@@ -1,18 +1,49 @@
 {
     "schemaVersion": 1,
-    "id": "maison_hantee_test",
-    "title": "La Maison Hantée (test Rania)",
-    "author": "Rania",
+    "id": "maison_hantee_v1",
+    "title": "La Maison Hantée",
+    "author": "Rania, Lou-Ann",
     "start": "p1",
     "puzzles": {
         "p1": {
             "type": "qcm",
-            "prompt": "Deux clés sont posées sur la table. Une seule ouvre la porte. Laquelle choisis-tu ?",
+            "prompt": "Deux clés sont posées sur la table. Une seule ouvre la porte du bureau. Laquelle choisis-tu ?",
             "image": "images/Enigme1.png",
             "choices": ["clé rouillée", "clé moisie"],
             "routes": {
-                "clé rouillée": "p4",
-                "clé moisie": "end_lose"
+                "clé rouillée": "p2",
+                "clé moisie": "p1bis"
+            }
+        },
+        "p1bis": {
+            "type": "text",
+            "prompt": "Quelle est la valeur de pi avec 4 chiffres après la virgule ?",
+            "image": "images/Enigme1bis.png",
+            "routes": {
+                "3,1416": "p2",
+                "3.1416": "p2",
+                "*": "end_lose_pi"
+            }
+        },
+        "p2": {
+            "type": "qcm",
+            "prompt": "Une alarme retentit dans la maison. Comment s'appelle le meurtrier de Scream 1 ?",
+            "image": "images/Enigme2.png",
+            "choices": ["Roman Bridger", "Billy Loomis", "Mickey Altieri"],
+            "routes": {
+                "Billy Loomis": "p3",
+                "*": "end_lose_scream"
+            }
+        },
+        "p3": {
+            "type": "text",
+            "prompt": "Retrouvez le mot de 7 lettres formé par les LEDs allumées (2 lettres peuvent être réutilisées).",
+            "image": "images/Enigme3.png",
+            "routes": {
+                "meurtre": "p4",
+                "Meurtre": "p4",
+                "MEURTRE": "p4",
+                "*": "end_lose_meurtre"
             }
         },
         "p4": {
@@ -23,18 +54,19 @@
                 "enterrement": "p5",
                 "Enterrement": "p5",
                 "ENTERREMENT": "p5",
-                "*": "end_lose"
+                "*": "end_lose_charade"
             }
         },
         "p5": {
             "type": "qcm",
             "prompt": "Choisis la porte qui scellera ton destin !",
             "image": "images/Enigme5.png",
+            "shuffle": true,
             "choices": ["Porte carré", "Porte triangle", "Porte ronde"],
             "routes": {
                 "Porte carré": "p4",
                 "Porte triangle": "end_win",
-                "Porte ronde": "end_lose"
+                "Porte ronde": "end_lose_hublot"
             }
         }
     }
