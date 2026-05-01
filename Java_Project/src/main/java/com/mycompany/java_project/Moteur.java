@@ -85,11 +85,11 @@ public class Moteur {
             case "end_win":
                 return "La maison se souvient de toi, " + pseudo + ". Elle t'attendra :)";
             case "end_lose_pi":
-                return pseudo + "... 3,1416. Tu aurais dû le savoir quand même :)";
+                return pseudo + "... c'est 3,1416. Tu aurais dû le savoir quand même :)";
                 
                 
             case "end_lose_scream":
-                return "Le meurtrier sort de l'ombre, " + pseudo + "... Trop tard pour fuir :)";
+                return "Le meurtrier sort de l'ombre ... Trop tard pour fuir :)"+pseudo;
             case "end_lose_meurtre":
                 
                 return "M.E.U.R.T.R.E. Tu l'épelleras dans ta tombe, " + pseudo + " :)";
