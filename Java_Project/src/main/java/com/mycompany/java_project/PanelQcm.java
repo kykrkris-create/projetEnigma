@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /** 
  * @author Rania
@@ -28,9 +31,12 @@ public class PanelQcm extends JPanel implements ActionListener {
             imageFond = new ImageIcon(imgFile.getAbsolutePath()).getImage();
         } 
         Font police = new Font("Serif", Font.BOLD, 16);
-        boutons = new JButton[puzzle.getChoices().size()];
-        for (int i = 0; i < puzzle.getChoices().size(); i++) {
-            JButton b = new JButton(puzzle.getChoices().get(i));
+        // on melange les choix a chaque affichage
+        List<String> choixMelanges = new ArrayList<>(puzzle.getChoices());
+        Collections.shuffle(choixMelanges);
+        boutons = new JButton[choixMelanges.size()];
+        for (int i = 0; i < choixMelanges.size(); i++) {
+            JButton b = new JButton(choixMelanges.get(i));
             styliserBouton(b);
             b.setFont(police);
             b.addActionListener(this);
@@ -63,14 +69,11 @@ public class PanelQcm extends JPanel implements ActionListener {
         for (JButton b : boutons) panelImage.add(b);
         this.add(panelImage, BorderLayout.CENTER); 
         JLabel labelConsigne = new JLabel(puzzle.getPrompt(), JLabel.CENTER);
-        
-        
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 18));
         labelConsigne.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         labelConsigne.setOpaque(true);
         labelConsigne.setBackground(Color.BLACK);
-        
         this.add(labelConsigne, BorderLayout.SOUTH);
     } 
     private void styliserBouton(JButton b) {
@@ -82,7 +85,6 @@ public class PanelQcm extends JPanel implements ActionListener {
     } 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
         for (JButton b : boutons) {
             if (e.getSource() == b) {
                 moteur.onReponse(b.getText());
