@@ -63,11 +63,14 @@ public class PanelQcm extends JPanel implements ActionListener {
         for (JButton b : boutons) panelImage.add(b);
         this.add(panelImage, BorderLayout.CENTER); 
         JLabel labelConsigne = new JLabel(puzzle.getPrompt(), JLabel.CENTER);
+        
+        
         labelConsigne.setForeground(Color.WHITE);
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 18));
         labelConsigne.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         labelConsigne.setOpaque(true);
         labelConsigne.setBackground(Color.BLACK);
+        
         this.add(labelConsigne, BorderLayout.SOUTH);
     } 
     private void styliserBouton(JButton b) {
@@ -79,6 +82,7 @@ public class PanelQcm extends JPanel implements ActionListener {
     } 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         for (JButton b : boutons) {
             if (e.getSource() == b) {
                 moteur.onReponse(b.getText());

@@ -97,6 +97,7 @@ public class Enigme3 extends JPanel implements ActionListener { private JTextFie
                 
                 labelTentatives.setText("Tentatives restantes : " + tentativesRestantes);
                 JOptionPane.showMessageDialog(this,
+                        
                     "Mauvaise réponse :)",
                     "Erreur", JOptionPane.WARNING_MESSAGE);
                 champReponse.setText("");
@@ -104,8 +105,11 @@ public class Enigme3 extends JPanel implements ActionListener { private JTextFie
                 labelTentatives.setText("Plus de tentatives.");
                 
                 
+                
                 champReponse.setEnabled(false);
+                
                 boutonValider.setEnabled(false);
+                
                 JOptionPane.showMessageDialog(this,
                     "Vous avez épuisé vos tentatives :) La réponse était : " +
                             BONNE_REPONSE,
