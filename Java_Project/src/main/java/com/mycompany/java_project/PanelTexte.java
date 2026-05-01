@@ -44,6 +44,8 @@ public class PanelTexte extends JPanel implements ActionListener {
         boutonValider.setFont(police);
         boutonValider.setBackground(Color.BLACK);
         boutonValider.setForeground(Color.WHITE);
+        
+        
         boutonValider.setFocusPainted(false);
         boutonValider.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
         boutonValider.setOpaque(true);
@@ -55,6 +57,7 @@ public class PanelTexte extends JPanel implements ActionListener {
         JPanel panelImage = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
+                
                 super.paintComponent(g);
                 if (imageFond != null) {
                     g.drawImage(imageFond, 0, 0, getWidth(), getHeight(), this);
@@ -80,6 +83,7 @@ public class PanelTexte extends JPanel implements ActionListener {
         panelImage.add(champReponse);
         panelImage.add(boutonValider);
         panelImage.add(labelTentatives);
+        
         this.add(panelImage, BorderLayout.CENTER); 
         JLabel labelConsigne = new JLabel(puzzle.getPrompt(), JLabel.CENTER);
         labelConsigne.setForeground(Color.WHITE);

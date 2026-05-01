@@ -48,8 +48,9 @@ public class Framebis extends JFrame {
             ScenarioLoader loader = new ScenarioLoader();
             Scenario scenario = loader.charger(dossierScenario);
 
-            Moteur moteur = new Moteur(scenario, this);
+            Moteur moteur = new Moteur(scenario, this,pseudo);
             moteur.demarrer();
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage());
             ex.printStackTrace();
@@ -58,4 +59,4 @@ public class Framebis extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Framebis());
     }
-}
+            }

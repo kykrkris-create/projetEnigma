@@ -26,6 +26,7 @@ public class Enigme1 extends JPanel implements ActionListener {
         Font policeBouton = new Font("Serif", Font.BOLD, 16);
         button1 = new JButton("Clé rouillée");
         styliserBouton(button1);
+        
         button1.setFont(policeBouton);
         button1.addActionListener(this);
 

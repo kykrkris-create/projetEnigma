@@ -17,6 +17,7 @@ public class Enigme4 extends JPanel implements ActionListener {
     private JButton boutonValider;
     private JLabel labelTentatives;
     private int tentativesRestantes = 3;
+    
     private static final String BONNE_REPONSE = "ENTERREMENT";
     private Image imageFond;
 
@@ -65,6 +66,8 @@ public class Enigme4 extends JPanel implements ActionListener {
         boutonValider.setBackground(Color.BLACK);
         boutonValider.setForeground(Color.WHITE);
         boutonValider.setFocusPainted(false);
+        
+        
         boutonValider.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
         boutonValider.setOpaque(true);
         boutonValider.addActionListener(this); 
@@ -80,6 +83,8 @@ public class Enigme4 extends JPanel implements ActionListener {
         labelConsigne.setFont(new Font("Serif", Font.PLAIN, 20));
         labelConsigne.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         labelConsigne.setOpaque(true);
+        
+        
         labelConsigne.setBackground(Color.BLACK);
         this.add(labelConsigne, BorderLayout.SOUTH);
     } 
@@ -92,21 +97,26 @@ public class Enigme4 extends JPanel implements ActionListener {
                 "Bonne réponse ! Vous pouvez continuer.",
                 "Succès", JOptionPane.INFORMATION_MESSAGE);//Existe deja dans swing 
         } else {
+            
             tentativesRestantes--;
             if (tentativesRestantes > 0) {
                 labelTentatives.setText("Tentatives restantes : " + tentativesRestantes);
+                
                 JOptionPane.showMessageDialog(this,
                     "Mauvaise réponse...",
                     "Erreur", JOptionPane.WARNING_MESSAGE);//pareil
                 champReponse.setText("");
             } else {
+                
                 labelTentatives.setText("Plus de tentatives.");
                 champReponse.setEnabled(false);
                 boutonValider.setEnabled(false);
+                
                 JOptionPane.showMessageDialog(this,
                     "Vous avez épuisé vos tentatives. La réponse était : " + BONNE_REPONSE,
                     "Échec", JOptionPane.ERROR_MESSAGE);// 
             }
-        }
+             }
     }
+    
 }

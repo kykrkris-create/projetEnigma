@@ -28,6 +28,7 @@ public class Enigme5 extends JPanel implements ActionListener {
         boutonTriangle = new JButton("Porte triangle");
         styliserBouton(boutonTriangle);
         boutonTriangle.setFont(policeBouton);
+        
         boutonTriangle.addActionListener(this); 
         boutonRond = new JButton("Porte ronde");
         styliserBouton(boutonRond);
@@ -36,6 +37,7 @@ public class Enigme5 extends JPanel implements ActionListener {
         JPanel panelImage = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
+                
                 super.paintComponent(g);
                 if (imageFond != null) {
                     g.drawImage(imageFond, 0, 0, getWidth(), getHeight(), this);
@@ -45,6 +47,8 @@ public class Enigme5 extends JPanel implements ActionListener {
             @Override
             public void doLayout() {
                 int w = getWidth();
+                
+                
                 int h = getHeight();
                 int btnW = 140;
                 int btnH = 40;
@@ -56,6 +60,8 @@ public class Enigme5 extends JPanel implements ActionListener {
         };
         panelImage.setBackground(Color.BLACK);
         panelImage.setPreferredSize(new Dimension(800, 480));
+        
+        
         panelImage.add(boutonCarre);
         panelImage.add(boutonTriangle);
         panelImage.add(boutonRond); 
@@ -80,6 +86,7 @@ public class Enigme5 extends JPanel implements ActionListener {
         if (e.getSource() == boutonCarre) {
             JOptionPane.showMessageDialog(this, "Vous avez choisi la porte carré");
         } else if (e.getSource() == boutonTriangle) {
+            
             JOptionPane.showMessageDialog(this, "Vous avez choisi la porte triangle");
         } else if (e.getSource() == boutonRond) {
             JOptionPane.showMessageDialog(this, "Vous avez choisi la porte ronde");

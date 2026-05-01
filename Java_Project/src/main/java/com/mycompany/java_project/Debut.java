@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.java_project;
-
+package com.mycompany.java_project; 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,8 +13,7 @@ import java.awt.event.ActionListener;
  *
  * @author X515, Rania
  */
-public class Debut extends JPanel implements ActionListener {
-
+public class Debut extends JPanel implements ActionListener { 
     private JTextField textPseudo;
     private JButton startBouton;
     private Image imageFond;
@@ -33,15 +31,17 @@ public class Debut extends JPanel implements ActionListener {
             + "</body></html>";
     public Debut() {
     this(null); 
-}
-    public Debut(Runnable onStart) {
+}   
+ public Debut(Runnable onStart) {
         this.onStart = onStart;
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
-//Pour charger l'image:
-        imageFond = new ImageIcon(getClass().getResource("maison.png")).getImage();
-        Font policeBouton = new Font("Serif", Font.BOLD, 16);
-//Pour le champ du pseudonyme:
+//on verifie que l'image existe avant sinon ca plante:
+        java.net.URL urlImage = getClass().getResource("maison.png");
+        if (urlImage != null) {
+        imageFond = new ImageIcon(urlImage).getImage();
+} 
+        Font policeBouton = new Font("Serif", Font.BOLD, 16); 
         textPseudo = new JTextField(20);
         textPseudo.setFont(new Font("Serif", Font.PLAIN, 16));
         textPseudo.setBackground(Color.BLACK);
@@ -97,14 +97,13 @@ public class Debut extends JPanel implements ActionListener {
     } 
     public String getPseudo() {
         return textPseudo.getText().trim();
-    }
-
+    } 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startBouton) {
             String pseudo = getPseudo();
             if (pseudo.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Saisis un pseudo pour commencer !");
+                JOptionPane.showMessageDialog(this, "Saisis un pseudo pour commencer :) ");
                 return;
             }
             if (onStart != null) {
