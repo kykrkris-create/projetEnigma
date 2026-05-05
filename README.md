@@ -47,3 +47,4 @@ mvn test    # si tu doutes de nous
 ## Avertissement final
 
 > *"Tu n'as pas perdu. On a juste décidé que c'était fini pour toi :) " 
+> Realisee par Lou-Ann, Rania & Kristine
