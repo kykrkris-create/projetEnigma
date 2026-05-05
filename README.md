@@ -1,5 +1,4 @@
-> _3N1GM4_.exe
-
+#                                        _3N1GM4_.exe
 > *La nuit est déjà tombée lorsque vous atteignez la vieille demeure...*
 
 Une vieille demeure. Six énigmes. Une seule sortie. 
