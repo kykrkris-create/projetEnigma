@@ -9,14 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
-/**
- * Test du parcours complet du scénario maison_hantee.
- * Simule plusieurs chemins (victoire, défaites) et vérifie la progression.
- * @author Rania
+/** 
+ * @author X515
  */
-public class ProgressionTest {
-
-    private Scenario chargerScenarioReel() throws Exception {
+public class ProgressionTest { 
+        private Scenario chargerScenarioReel() throws Exception {
         File dossier = new File("scenarios/maison_hantee");
         ScenarioLoader loader = new ScenarioLoader();
         return loader.charger(dossier);
