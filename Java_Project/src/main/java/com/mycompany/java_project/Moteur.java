@@ -96,7 +96,7 @@ public class Moteur {
             case "end_lose_charade":
                 return pseudo + ", tu n'as pas compris la charade. C'est pas grave, tu vas la vivre de toute façon :)";
             case "end_lose_hublot":
-                return "La porte ronde aime les visiteurs, " + pseudo + ". Elle ne les laisse plus jamais sortir...";
+                return "Cette porte aime bien les visiteurs, " + pseudo + ". Elle ne les laisse plus jamais sortir...";
             default:
                 return pseudo + ", on a juste décidé que c'était fini pour toi...";
                   }
